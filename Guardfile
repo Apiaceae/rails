@@ -1,6 +1,6 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
-
+require 'active_support/core_ext'
 guard 'bundler' do
   watch('Gemfile')
   # Uncomment next line if Gemfile contain `gemspec' command
@@ -32,15 +32,17 @@ guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' }, :rspec_env => { 'RAIL
   watch('config/application.rb')
   watch('config/environment.rb')
   watch('config/environments/test.rb')
+  watch(%r{^config/environments/.+\.rb$})
   watch(%r{^config/initializers/.+\.rb$})
   watch('Gemfile')
   watch('Gemfile.lock')
   watch('spec/spec_helper.rb') { :rspec }
   watch('test/test_helper.rb') { :test_unit }
+  watch('spec/support/')
   watch(%r{features/support/}) { :cucumber }
 end
 
-guard 'rspec', :version => 2 ,:cli => "--drb",:notification => true do
+guard 'rspec', :version => 2, :cli => '--drb', :notification => true do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
